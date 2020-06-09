@@ -1,0 +1,23 @@
+---
+- hosts: 
+  become: yes
+  tasks: 
+   - name: create route table for public subnet
+     ec2_vpc_route_table:
+        aws_access_key: "{{ access_key }}"
+        aws_secret_key: "{{ secret_key }}"
+        region: "{{ aws_region }}"
+        state: present
+        vpc_id: "{{ ansiblevpc.vpc.id }}"
+        tags:
+           Name: rt_ansiblevpc_publicsubnet
+        subnets:  
+          - "{{ public_subnet.subnet.id }}"
+        routes: 
+          - dest: 0.0.0.0/0
+            gateway: "{{ ansiblevpc_igw.gateway_id }}"
+     register: rt_ansiblevpc_publicsubnet
+   - name: display public route table
+     debug: 
+        var: rt_ansiblevpc_publicsubnet
+

@@ -1,0 +1,17 @@
+---
+- hosts: 
+  become: yes
+  tasks: 
+   -name: creating internet gateway for vpc
+    ec2_vpc_igw:
+      aws_access_key: "{{ aws_access }}"
+      aws_secret_key: "{{ aws_secret }}"
+      region: "{{ aws_region }}"
+      state: present
+      vpc_id: "{{ ansiblevpc.vpc.id }}"
+      tags: 
+         name: ansiblevpc_igw
+         register: ansiblevpc_igw
+- name: display igw details
+  debug: 
+     var: ansiblevpc_igw    

@@ -1,0 +1,19 @@
+---
+- hosts: 
+  become: yes
+  tasks:
+   - name: create vpc
+     ec2_vpc: 
+     aws_access_key: "{{ access_key }}"
+     aws_secret_key: "{{ secret_key }}"
+     region: "{{ aws_region}}"
+  name: vpc_net 
+  cidr_block: 0.0.0.0/24
+  tags: 
+    module: ec2_vpc
+    tenancy: default
+    register: ansiblevpc
+- name: debugvpc
+  debug:
+    var: ansiblevpc
+   

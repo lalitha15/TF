@@ -1,0 +1,22 @@
+---
+- hosts: 
+  become: yes
+  tasks:
+   - name: create security group
+     ec2_group:
+       aws_access_key: "{{ aws_access_key }}"
+       aws_secret_key: "{{ aws_secret_key }}"
+       region: "{{ aws_region }}"
+       name: "Test Security Group"
+       description: "Test Security Group"
+       vpc_id: "{{ ansiblevpc.vpc.id }}"
+       tags: 
+         Name: "Test Security Group"
+       rules: 
+         - port: "tcp"
+           ports: "22"
+           cidr_ip: 0.0.0.0/0
+     register: my_vpc_sg
+   - name: set security group ID in variable
+     set_facts:
+       sg_id: "{{ my_vpc_sg.group_id }}"
